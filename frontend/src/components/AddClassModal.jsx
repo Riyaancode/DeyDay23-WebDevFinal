@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 export default function AddClassModal({ open, close, currUser }) {
   const [userdata, setUserData] = useState({
     name: "",
@@ -15,24 +15,19 @@ export default function AddClassModal({ open, close, currUser }) {
 
   const createClass = async (e) => {
     console.log(userdata);
-    // try {
-    //   const res = await axios.post(
-    //     "http://localhost:5005/api/user/signin",
-    //     userdata
-    //   );
-    //   // console.log(res);
-    //   // setUserData({ name: "", email: "", password: "" });
-    //   const user = res.data;
-    //   console.log(user);
-    //   localStorage.setItem("user", JSON.stringify(user));
-    //   authLocal.login(user);
-    //   navigate(redirectPath, { replace: true });
-    //   alert("successfully Signin");
-    // } catch (error) {
-    //   alert(error.response.data.error);
+    try {
+      const res = await axios.post(
+        "http://localhost:5005/api/class/add",
+        userdata
+      );
 
-    //   console.log(error);
-    // }
+      alert("successfully class created");
+      close();
+    } catch (error) {
+      alert(error.response.data.error);
+
+      console.log(error);
+    }
   };
 
   const handleInputs = (e) => {
