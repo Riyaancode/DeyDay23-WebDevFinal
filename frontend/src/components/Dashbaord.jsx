@@ -1,14 +1,20 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  BellIcon,
+  PlusIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { Link, Outlet } from "react-router-dom";
+import AddClassModal from "./AddClassModal";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+// const user = {
+//   name: "Tom Cook",
+//   email: "tom@example.com",
+//   imageUrl:
+//     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+// };
 const navigation = [
   { name: "Dashboard", href: "/feed", current: true },
   { name: "Assignments", href: "/assignments", current: false },
@@ -24,8 +30,24 @@ function classNames(...classes) {
 }
 
 export default function Dashbaord(params) {
+  const [modal, setModal] = useState(false);
+  const [user, setCurrUser] = useState({});
+
+  const openModal = () => {
+    setModal(true);
+  };
+  const closeModal = () => {
+    setModal(false);
+  };
+  useEffect(() => {
+    const teacher = JSON.parse(localStorage.getItem("user"));
+    if (teacher) {
+      setCurrUser(teacher);
+    }
+  }, []);
   return (
     <>
+      {modal ? <AddClassModal open={openModal} close={closeModal} /> : ""}
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-white">
           {({ open }) => (
@@ -58,13 +80,19 @@ export default function Dashbaord(params) {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      <button
-                        type="button"
-                        className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                      >
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                      {user.role === "Teacher" ? (
+                        <button
+                          type="button"
+                          onClick={() => openModal(true)}
+                          className="rounded-full bg-gray-300 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        >
+                          <span className="sr-only">Add Classes</span>
+                          {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
+                          <PlusIcon class="h-6 w-6 " />
+                        </button>
+                      ) : (
+                        ""
+                      )}
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
@@ -73,7 +101,7 @@ export default function Dashbaord(params) {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src={require("../assets/user_318-563642.avif")}
                               alt=""
                             />
                           </Menu.Button>
@@ -152,25 +180,38 @@ export default function Dashbaord(params) {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={require("../assets/user_318-563642.avif")}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">
+                      <div className="text-base font-medium leading-none text-gray-900">
                         {user.name}
                       </div>
-                      <div className="text-sm font-medium leading-none text-gray-400">
+                      <div className="text-sm font-medium leading-none text-gray-900">
                         {user.email}
                       </div>
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    </button> */}
+                    {user.role === "Teacher" ? (
+                      <button
+                        type="button"
+                        onClick={() => openModal(true)}
+                        className="rounded-full bg-gray-300 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      >
+                        <span className="sr-only">Add Classes</span>
+                        {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
+                        <PlusIcon class="h-6 w-6 " />
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-
+import axios from "axios";
 export default function Signin(params) {
   const [userdata, setUserData] = useState({
     email: "",
@@ -10,27 +10,30 @@ export default function Signin(params) {
 
   const navigate = useNavigate();
   const locationPath = useLocation();
-  const redirectPath = locationPath.state?.path || "/";
+  const redirectPath = locationPath.state?.path || "/feed";
 
   const authLocal = useAuth();
 
   const signin = async (e) => {
     console.log(userdata);
-    //   try {
-    //     const res = await axios.post("http://localhost:4000/register", userdata);
-    //     // console.log(res);
-    //     setUserData({ name: "", email: "", password: "" });
-    //     const user = res.data;
-    //     console.log(user);
-    //     localStorage.setItem("user", JSON.stringify(user));
-    //     authLocal.login(user);
-    //     navigate(redirectPath, { replace: true });
-    //     alert("successfully Signup");
-    //   } catch (error) {
-    //     alert(error.response.data.error);
+    try {
+      const res = await axios.post(
+        "http://localhost:5005/api/user/signin",
+        userdata
+      );
+      // console.log(res);
+      // setUserData({ name: "", email: "", password: "" });
+      const user = res.data;
+      console.log(user);
+      localStorage.setItem("user", JSON.stringify(user));
+      authLocal.login(user);
+      navigate(redirectPath, { replace: true });
+      alert("successfully Signin");
+    } catch (error) {
+      alert(error.response.data.error);
 
-    //     console.log(error);
-    //   }
+      console.log(error);
+    }
   };
 
   const handleInputs = (e) => {

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-
+import axios from "axios";
 export default function Signup(params) {
   const [userdata, setUserData] = useState({
     fullName: "",
     email: "",
-    role: "",
+    role: "Teacher",
     password: "",
   });
 
@@ -18,21 +18,24 @@ export default function Signup(params) {
 
   const signup = async (e) => {
     console.log(userdata);
-    //   try {
-    //     const res = await axios.post("http://localhost:4000/register", userdata);
-    //     // console.log(res);
-    //     setUserData({ name: "", email: "", password: "" });
-    //     const user = res.data;
-    //     console.log(user);
-    //     localStorage.setItem("user", JSON.stringify(user));
-    //     authLocal.login(user);
-    //     navigate(redirectPath, { replace: true });
-    //     alert("successfully Signup");
-    //   } catch (error) {
-    //     alert(error.response.data.error);
+    try {
+      const res = await axios.post(
+        "http://localhost:5005/api/user/create",
+        userdata
+      );
+      // console.log(res);
+      // setUserData({ name: "", email: "", password: "" });
+      const user = res.data;
+      console.log(user);
+      localStorage.setItem("user", JSON.stringify(user));
+      authLocal.login(user);
+      navigate(redirectPath, { replace: true });
+      alert("successfully Signup");
+    } catch (error) {
+      alert(error.response.data.error);
 
-    //     console.log(error);
-    //   }
+      console.log(error);
+    }
   };
 
   const handleInputs = (e) => {
@@ -121,7 +124,7 @@ export default function Signup(params) {
           </div>
         </div>
         <div>
-          <fieldset className="col-span-6">
+          {/* <fieldset className="col-span-6">
             <legend className="block text-sm font-medium text-gray-700">
               Roles
             </legend>
@@ -143,7 +146,23 @@ export default function Signup(params) {
                 </select>
               </div>
             </div>
-          </fieldset>
+          </fieldset> */}
+
+          <label
+            htmlFor="countries"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Select an option
+          </label>
+          <select
+            id="countries"
+            name="role"
+            onChange={handleInputs}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option selected>Teacher</option>
+            <option defaultValue="Student">Student</option>
+          </select>
         </div>
 
         <div>
