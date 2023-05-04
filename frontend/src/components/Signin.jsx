@@ -48,8 +48,7 @@ export default function Signin(params) {
         <h1 className="text-2xl font-bold sm:text-3xl">Welcome Back!</h1>
 
         <p className="mt-4 text-gray-500">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Et libero
-          nulla eaque error neque ipsa culpa autem, at itaque nostrum!
+          Login to your Account
         </p>
       </div>
 
