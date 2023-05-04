@@ -16,23 +16,27 @@ export default function Signin(params) {
 
   const signin = async (e) => {
     console.log(userdata);
-    try {
-      const res = await axios.post(
-        "http://localhost:5005/api/user/signin",
-        userdata
-      );
-      // console.log(res);
-      // setUserData({ name: "", email: "", password: "" });
-      const user = res.data;
-      console.log(user);
-      localStorage.setItem("user", JSON.stringify(user));
-      authLocal.login(user);
-      navigate(redirectPath, { replace: true });
-      alert("successfully Signin");
-    } catch (error) {
-      alert(error.response.data.error);
+    if (!userdata.email || !userdata.password) {
+      alert("Please Fill All Field");
+    } else {
+      try {
+        const res = await axios.post(
+          "http://localhost:5005/api/user/signin",
+          userdata
+        );
+        // console.log(res);
+        // setUserData({ name: "", email: "", password: "" });
+        const user = res.data;
+        console.log(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        authLocal.login(user);
+        navigate(redirectPath, { replace: true });
+        alert("successfully Signin");
+      } catch (error) {
+        alert(error.response.data.error);
 
-      console.log(error);
+        console.log(error);
+      }
     }
   };
 
@@ -47,9 +51,7 @@ export default function Signin(params) {
       <div className="mx-auto max-w-lg text-center">
         <h1 className="text-2xl font-bold sm:text-3xl">Welcome Back!</h1>
 
-        <p className="mt-4 text-gray-500">
-          Login to your Account
-        </p>
+        <p className="mt-4 text-gray-500">Login to your Account</p>
       </div>
 
       <form

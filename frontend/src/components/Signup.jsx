@@ -18,23 +18,32 @@ export default function Signup(params) {
 
   const signup = async (e) => {
     console.log(userdata);
-    try {
-      const res = await axios.post(
-        "http://localhost:5005/api/user/create",
-        userdata
-      );
-      // console.log(res);
-      // setUserData({ name: "", email: "", password: "" });
-      const user = res.data;
-      console.log(user);
-      localStorage.setItem("user", JSON.stringify(user));
-      authLocal.login(user);
-      navigate(redirectPath, { replace: true });
-      alert("successfully Signup");
-    } catch (error) {
-      alert(error.response.data.error);
+    if (
+      !userdata.fullName ||
+      !userdata.email ||
+      !userdata.role ||
+      !userdata.password
+    ) {
+      alert("Please Fill All Field");
+    } else {
+      try {
+        const res = await axios.post(
+          "http://localhost:5005/api/user/create",
+          userdata
+        );
+        // console.log(res);
+        // setUserData({ name: "", email: "", password: "" });
+        const user = res.data;
+        console.log(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        authLocal.login(user);
+        navigate(redirectPath, { replace: true });
+        alert("successfully Signup");
+      } catch (error) {
+        alert(error.response.data.error);
 
-      console.log(error);
+        console.log(error);
+      }
     }
   };
 
