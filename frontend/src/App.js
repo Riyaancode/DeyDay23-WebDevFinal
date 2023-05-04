@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Feed from "./components/Feed";
+import Dashbaord from "./components/Dashbaord";
+import Assignments from "./components/Assignments";
+import { AuthProvider } from "./context/AuthProvider";
+import { RequireAuth } from "./context/RequireAuth";
+import Signup from "./components/Signup";
+import NotFound from "./components/NotFound";
+import Signin from "./components/Signin";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Dashbaord />
+              </RequireAuth>
+            }
+          >
+            <Route index path="/feed" element={<Feed />} />
+            <Route path="/assignments" element={<Assignments />} />
+          </Route>
+
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
