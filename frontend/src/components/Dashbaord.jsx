@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link, Outlet } from "react-router-dom";
 import AddClassModal from "./AddClassModal";
+import { AuthProvider } from "../context/AuthProvider";
 
 // const user = {
 //   name: "Tom Cook",
@@ -20,10 +21,10 @@ const navigation = [
   { name: "Assignments", href: "/assignments", current: false },
 ];
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Sign out", href: "./signin" } 
 ];
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -32,6 +33,7 @@ function classNames(...classes) {
 export default function Dashbaord(params) {
   const [modal, setModal] = useState(false);
   const [user, setCurrUser] = useState({});
+  const authContext = useContext(AuthProvider);
 
   const openModal = () => {
     setModal(true);
@@ -214,6 +216,7 @@ export default function Dashbaord(params) {
                     )}
                   </div>
                   <div className="mt-3 space-y-1 px-2">
+
                     {userNavigation.map((item) => (
                       <Disclosure.Button
                         key={item.name}
@@ -221,7 +224,9 @@ export default function Dashbaord(params) {
                         href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
-                        {item.name}
+                        <span onClick={() => authContext.logout()}>
+                          {item.name} "hi"
+                        </span>
                       </Disclosure.Button>
                     ))}
                   </div>
